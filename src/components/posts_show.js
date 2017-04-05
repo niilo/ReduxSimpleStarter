@@ -9,7 +9,9 @@ class PostsShow extends Component {
     }
 
     onDeleteClick() {
-        this.props.deletePost(this.props.match.params.id)
+        this.props.deletePost(this.props.match.params.id).then(() => {
+            this.props.history.push('/');
+        })
     }
 
     render() {
