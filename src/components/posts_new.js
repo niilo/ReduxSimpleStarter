@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 import { Field, reduxForm } from 'redux-form'
 import { createPost } from '../actions/index'
 import { Link } from 'react-router-dom'
 
 const renderInputField = ({ input, label, type, meta: { touched, error, warning, invalid } }) => (
     <div className={`form-group ${touched && invalid ? 'has-danger' : ''}`}>
-        <label>Title</label>
+        <label>{label}</label>
         <input {...input} placeholder={label} type={type} className="form-control" />
         <div className={`text-help ${touched && invalid ? 'has-danger' : ''}`}>
             {touched && ((error && <span>{error}</span>) || (warning && <span>{warning}</span>))}
@@ -15,7 +15,7 @@ const renderInputField = ({ input, label, type, meta: { touched, error, warning,
 
 const renderTextArea = ({ input, label, type, meta: { touched, error, warning, invalid } }) => (
     <div className={`form-group ${touched && invalid ? 'has-danger' : ''}`}>
-        <label>Title</label>
+        <label>{label}</label>
         <textarea {...input} placeholder={label} type={type} className="form-control" />
         <div className={`text-help ${touched && invalid ? 'has-danger' : ''}`}>
             {touched && ((error && <span>{error}</span>) || (warning && <span>{warning}</span>))}
@@ -60,5 +60,9 @@ const validate = (values) => {
 export default reduxForm({
     form: 'PostsNew',
     validate,
-    onSubmit: (data) => { createPost(data) }
+    onSubmit: (data, dispatch, props) => { 
+        const resp = createPost(data).payload.then((data) => {
+            props.history.push('/');
+        })
+    }
 }, null, { createPost } )(PostsNew)
